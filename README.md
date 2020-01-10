@@ -1,1 +1,2 @@
 # space-turnkey
+SPACE TURNKEY SOLUTIONS Creating exceptional spaces that transform lifestyles. Founded in May 2016 by construction manager Charles Quartey, SPACE Turnkey Solutions is a leading customer-oriented design and build firm based in Accra.
