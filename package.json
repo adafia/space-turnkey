@@ -1,0 +1,45 @@
+{
+  "name": "space-turnkey",
+  "version": "1.0.0",
+  "description": "SPACE TURNKEY SOLUTIONS Creating exceptional spaces that transform lifestyles. Founded in May 2016 by construction manager Charles Quartey, SPACE Turnkey Solutions is a leading customer-oriented design and build firm based in Accra.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "DEBUG=app nodemon app.js",
+    "lint": "npx eslint app.js",
+    "lint_fix": "npx eslint app.js  --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adafia/space-turnkey.git"
+  },
+  "author": "samuel adafia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adafia/space-turnkey/issues"
+  },
+  "homepage": "https://github.com/adafia/space-turnkey#readme",
+  "dependencies": {
+    "bootstrap": "4.4.1",
+    "chalk": "3.0.0",
+    "debug": "4.1.1",
+    "express": "4.17.1",
+    "jquery": "3.4.1",
+    "morgan": "1.9.1",
+    "nodemon": "2.0.2"
+  },
+  "devDependencies": {
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-plugin-import": "2.20.0"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": ["node_modules/**/node_modules"],
+    "delay": "2500",
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 4000
+    }
+  }
+}
