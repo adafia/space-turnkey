@@ -1,2 +1,10 @@
 # space-turnkey
-SPACE TURNKEY SOLUTIONS Creating exceptional spaces that transform lifestyles. Founded in May 2016 by construction manager Charles Quartey, SPACE Turnkey Solutions is a leading customer-oriented design and build firm based in Accra.
+The API endpoints for SPACE Turnkey Solutions
+
+### Setting up the project
+> create a .env file according to the specifications of the example.env file
+> npm i
+> npm run dev
+
+### Features
+> CRUD functionality for employee resource

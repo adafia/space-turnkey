@@ -1,22 +1,33 @@
 const express = require('express');
-const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
-const path = require('path');
+const mongoose = require('mongoose');
+const employees = require('./routes/employees');
+require('dotenv').config();
 
+const connectionString = process.env.MONGODB_CONNECTION_STRING;
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => debug('connected to MongoDB...'))
+  .catch((err) => debug('Could not connect to MongoDB...', err));
+
+// Middleware
 const app = express();
-const port = process.env.PORT || 3000;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/api/employees', employees);
 
-app.use(morgan('tiny'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
-app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
-app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
+
+if (app.get('env') === 'development') {
+  app.use(morgan('tiny'));
+  debug('Morgan enabled...');
+}
+
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+  res.send('Hello from Space Turnkey Solutions API');
 });
 
-app.listen(port, () => {
-  debug(`Listening on port ${chalk.green(port)}`);
-});
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => debug(`Listening on port ${port}...`));
