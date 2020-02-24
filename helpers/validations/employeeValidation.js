@@ -5,7 +5,8 @@ function validateEmployee(employee) {
     firstName: Joi.string().alphanum().min(1).required(),
     lastName: Joi.string().alphanum().min(1).required(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-    designation: Joi.string().min(1).required(),
+    department: Joi.string().min(2).required(),
+    designation: Joi.string().min(2).required(),
     avatar: Joi.string(),
   });
 

@@ -6,5 +6,8 @@ The API endpoints for SPACE Turnkey Solutions
 > npm i
 > npm run dev
 
+### Starting the DB
+> mongod --dbpath=/Users/adafia/data/db
+
 ### Features
 > CRUD functionality for employee resource
