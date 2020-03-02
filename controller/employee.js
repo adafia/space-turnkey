@@ -12,19 +12,26 @@ const EmployeeController = {
     if (found.length !== 0) return res.status(409).send({ message: `Employee with email: ${req.body.email} already exist` });
 
     // Save employee details
-    let employee = new Employee({
+    const employee = new Employee({
       first_name: req.body.firstName,
       last_name: req.body.lastName,
       email: req.body.email,
+      department: req.body.department,
       designation: req.body.designation,
       avatar: req.body.avatar,
     });
 
-    employee = await employee.save();
-    return res.status(201).send({
-      message: 'Employee profile has been created successfully',
-      employee,
-    });
+    try {
+      await employee.save();
+      return res.status(201).send({
+        message: 'Employee profile has been created successfully',
+        employee,
+      });
+    } catch (e) {
+      return res.status(400).send({
+        message: e,
+      });
+    }
   },
 
   async getEmployees(req, res) {
@@ -50,6 +57,16 @@ const EmployeeController = {
     });
   },
 
+  async getEmployeesByDep(req, res) {
+    const employees = await Employee.find({ department: req.params.department });
+
+    if (employees.length === 0) return res.status(404).send(`There are no employees in the ${req.params.department} department`);
+    return res.status(200).send({
+      message: `Employees in the ${req.params.department} department have been fetched successfully`,
+      employees,
+    });
+  },
+
   async updateEmployee(req, res) {
     const { error } = validateEmployee(req.body);
     if (error) {
@@ -60,6 +77,7 @@ const EmployeeController = {
       first_name: req.body.firstName,
       last_name: req.body.lastName,
       email: req.body.email,
+      department: req.body.department,
       designation: req.body.designation,
       avatar: req.body.avatar,
     },
