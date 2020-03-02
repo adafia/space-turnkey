@@ -1,10 +1,10 @@
 const Employee = require('../models/employee');
-const validateEmployee = require('../helpers/validations/employeeValidation');
+const { validateCreate, validateUpdate } = require('../helpers/validations/employeeValidation');
 
 const EmployeeController = {
   async create(req, res) {
     // Validate user input
-    const { error } = validateEmployee(req.body);
+    const { error } = validateCreate(req.body);
     if (error) return res.status(400).send({ message: error.details[0].message });
 
     // Check if employee already exist
@@ -21,17 +21,11 @@ const EmployeeController = {
       avatar: req.body.avatar,
     });
 
-    try {
-      await employee.save();
-      return res.status(201).send({
-        message: 'Employee profile has been created successfully',
-        employee,
-      });
-    } catch (e) {
-      return res.status(400).send({
-        message: e,
-      });
-    }
+    await employee.save();
+    return res.status(201).send({
+      message: 'Employee profile has been created successfully',
+      employee,
+    });
   },
 
   async getEmployees(req, res) {
@@ -68,26 +62,28 @@ const EmployeeController = {
   },
 
   async updateEmployee(req, res) {
-    const { error } = validateEmployee(req.body);
+    const { error } = validateUpdate(req.body);
     if (error) {
       return res.status(400).send({ message: error.details[0].message });
     }
 
-    const employee = await Employee.findByIdAndUpdate(req.params.id, {
-      first_name: req.body.firstName,
-      last_name: req.body.lastName,
-      email: req.body.email,
-      department: req.body.department,
-      designation: req.body.designation,
-      avatar: req.body.avatar,
-    },
-    { new: true });
+    const employee = await Employee.findById(req.params.id);
+
+    await employee.updateOne({
+      first_name: req.body.firstName ? req.body.firstName : employee.first_name,
+      last_name: req.body.lastName ? req.body.lastName : employee.last_name,
+      email: req.body.email ? req.body.email : employee.email,
+      department: req.body.department ? req.body.department : employee.department,
+      designation: req.body.designation ? req.body.designation : employee.designation,
+      avatar: req.body.avatar ? req.body.avatar : employee.avatar,
+    });
+
+    await employee.save();
 
     if (!employee) return res.status(404).send({ message: 'The employee with the given ID was not found' });
 
     return res.status(200).send({
-      message: 'Employee profile has been updated succefully',
-      employee,
+      message: 'Employee profile has been updated successfully',
     });
   },
 
@@ -99,7 +95,7 @@ const EmployeeController = {
     }
 
     return res.status(200).send({
-      message: 'Employee profile has been deleted succefully',
+      message: 'Employee profile has been deleted successfully',
       employee,
     });
   },
