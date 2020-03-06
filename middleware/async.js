@@ -5,7 +5,6 @@ const Async = {
       try {
         return await handler(req, res);
       } catch (ex) {
-        console.log('got here');
         return next(ex);
       }
     };
