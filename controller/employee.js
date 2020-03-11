@@ -1,5 +1,5 @@
 const Employee = require('../models/employee');
-const { validateCreate, validateUpdate } = require('../helpers/validations/employeeValidation');
+const { validateCreate, validateUpdate, validateByDep } = require('../helpers/validations/employeeValidation');
 
 const EmployeeController = {
   async create(req, res) {
@@ -13,8 +13,8 @@ const EmployeeController = {
 
     // Save employee details
     const employee = new Employee({
-      first_name: req.body.firstName,
-      last_name: req.body.lastName,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       email: req.body.email,
       department: req.body.department,
       designation: req.body.designation,
@@ -31,7 +31,7 @@ const EmployeeController = {
   async getEmployees(req, res) {
     const employees = await Employee.find();
     if (employees.length === 0) {
-      return res.send({
+      return res.status(404).send({
         message: 'You do not have any employee profiles',
       });
     }
@@ -44,7 +44,7 @@ const EmployeeController = {
   async getEmployee(req, res) {
     const employee = await Employee.findById(req.params.id);
 
-    if (!employee) return res.status(404).send('The employee with the given ID was not found');
+    if (!employee) return res.status(404).send({ message: 'The employee with the given ID was not found' });
     return res.status(200).send({
       message: 'Employee profile has been fetched successfully',
       employee,
@@ -52,9 +52,13 @@ const EmployeeController = {
   },
 
   async getEmployeesByDep(req, res) {
+    req.params.department = req.params.department.toLowerCase().trim();
+    const { error } = validateByDep(req.params);
+    if (error) return res.status(400).send({ message: error.details[0].message });
+
     const employees = await Employee.find({ department: req.params.department });
 
-    if (employees.length === 0) return res.status(404).send(`There are no employees in the ${req.params.department} department`);
+    if (employees.length === 0) return res.status(404).send({ message: `There are no employees in the ${req.params.department} department` });
     return res.status(200).send({
       message: `Employees in the ${req.params.department} department have been fetched successfully`,
       employees,
@@ -69,9 +73,11 @@ const EmployeeController = {
 
     const employee = await Employee.findById(req.params.id);
 
+    if (!employee) return res.status(404).send({ message: 'The employee with the given ID was not found' });
+
     await employee.updateOne({
-      first_name: req.body.firstName ? req.body.firstName : employee.first_name,
-      last_name: req.body.lastName ? req.body.lastName : employee.last_name,
+      firstName: req.body.firstName ? req.body.firstName : employee.firstName,
+      lastName: req.body.lastName ? req.body.lastName : employee.lastName,
       email: req.body.email ? req.body.email : employee.email,
       department: req.body.department ? req.body.department : employee.department,
       designation: req.body.designation ? req.body.designation : employee.designation,
@@ -80,19 +86,17 @@ const EmployeeController = {
 
     await employee.save();
 
-    if (!employee) return res.status(404).send({ message: 'The employee with the given ID was not found' });
-
     return res.status(200).send({
       message: 'Employee profile has been updated successfully',
     });
   },
 
   async deleteEmployee(req, res) {
-    const employee = await Employee.findByIdAndRemove(req.params.id);
-
+    const employee = await Employee.findById(req.params.id);
     if (!employee) {
       return res.status(404).send({ message: 'The employee with the given ID was not found' });
     }
+    await Employee.deleteOne({ _id: req.params.id });
 
     return res.status(200).send({
       message: 'Employee profile has been deleted successfully',
