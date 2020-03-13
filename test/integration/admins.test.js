@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 /* eslint-disable no-undef */
 const _ = require('lodash');
 const chai = require('chai');

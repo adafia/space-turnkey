@@ -15,6 +15,10 @@ if (app.get('env') === 'development') {
   debug('- Morgan enabled... -');
 }
 
+app.get('/', (req, res) => {
+  res.send('Hello from Space Turnkey Solutions API');
+});
+
 const port = process.env.PORT || 3000;
 
 const server = app.listen(port, () => debug(`- Listening on port ${port}... -`));
