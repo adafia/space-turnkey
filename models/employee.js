@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 const Employee = mongoose.model('Employee', new mongoose.Schema({
-  first_name: {
+  firstName: {
     type: String,
     required: true,
     trim: true,
     minlength: 1,
     maxlength: 255,
   },
-  last_name: {
+  lastName: {
     type: String,
     required: true,
     trim: true,
@@ -25,7 +25,7 @@ const Employee = mongoose.model('Employee', new mongoose.Schema({
   department: {
     type: String,
     required: true,
-    enum: ['Human Resource', 'Engineering', 'Operations'],
+    enum: ['human resource', 'engineering', 'operations'],
   },
   designation: {
     type: String,

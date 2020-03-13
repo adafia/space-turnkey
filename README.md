@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/adafia/space-turnkey.svg?branch=develop)](https://travis-ci.com/adafia/space-turnkey) [![Coverage Status](https://coveralls.io/repos/github/adafia/space-turnkey/badge.svg?branch=unit-testing)](https://coveralls.io/github/adafia/space-turnkey?branch=unit-testing)
+
 # space-turnkey
 The API endpoints for SPACE Turnkey Solutions
 

@@ -1,6 +1,6 @@
 const express = require('express');
-const debug = require('debug')('app');
 const morgan = require('morgan');
+const debug = require('./helpers/debug');
 
 const app = express();
 require('./start/routes')(app);
@@ -17,4 +17,6 @@ if (app.get('env') === 'development') {
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => debug(`- Listening on port ${port}... -`));
+const server = app.listen(port, () => debug(`- Listening on port ${port}... -`));
+
+module.exports = server;
