@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const debug = require('../helpers/debug');
 require('dotenv').config();
 
-const connectionString = process.env.MONGODB_CONNECTION_STRING_DEV;
+const connectionString = process.env.MONGODB_CONNECTION_STRING;
 
 const dbInit = () => {
   // MongoDB database connection
